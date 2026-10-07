@@ -25,10 +25,33 @@ export const registerService = async (
 
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const newUser = await db
+  const [newUser] = await db
     .insert(users)
     .values({ name, email, passwordHash })
     .returning(userColumns);
 
   return newUser;
+};
+
+export const loginService = async (email: string, password: string) => {
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
+
+  if (!existingUser) {
+    throw new Error("USERDOESNTEXISTS");
+  }
+
+  const isMatch = await bcrypt.compare(password, existingUser.passwordHash);
+
+  if (!isMatch) {
+    throw new Error("PASSWORDDOESNTMATCH");
+  }
+
+  return {
+    id: existingUser.id,
+    name: existingUser.name,
+    email: existingUser.email,
+  };
 };
