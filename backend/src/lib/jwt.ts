@@ -11,4 +11,6 @@ export const generateToken = (userId: string) => {
   });
 };
 
-
+export const verifyToken = (token: string) => {
+  return jwt.verify(token, JWT_SECRET);
+};

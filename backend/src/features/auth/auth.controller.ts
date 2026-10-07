@@ -1,37 +1,67 @@
 import { Request, Response } from "express";
-import { loginService, registerService } from "./auth.service.js";
+import { getMeService, loginService, registerService } from "./auth.service.js";
 import { generateToken } from "../../lib/jwt.js";
 import { setAuthCookie } from "../../lib/auth-cookie.js";
+import { AuthRequest } from "../../types/express.types.js";
+import { ApiError } from "../../utils/api-error.js";
 
 export const register = async (req: Request, res: Response) => {
+  const { name, email, password } = req.body;
+
+  const user = await registerService(name, email, password);
+
+  if (!user) {
+    throw new ApiError(500, "Failed to register user");
+  }
+
+  const token = generateToken(user.id);
+  setAuthCookie(res, token);
+
+  return res.status(201).json({
+    success: true,
+    message: "User Registration successfull",
+    data: user,
+  });
+};
+
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await loginService(email, password);
+
+  if (!user) {
+    throw new ApiError(500, "Failed to login user");
+  }
+
+  const token = generateToken(user.id);
+  setAuthCookie(res, token);
+
+  return res.status(200).json({
+    success: true,
+    message: "User logged in successfull",
+    data: user,
+  });
+};
+
+export const getMe = async (req: AuthRequest, res: Response) => {
   try {
-    const { name, email, password } = req.body;
-
-    const user = await registerService(name, email, password);
-
-    if (!user) {
-      return res.status(500).json({
-        success: false,
-        message: "Failed to register user",
-      });
+    const userId = req.userId;
+    if (!userId) {
+      throw new ApiError(401, "No user id");
     }
 
-    const token = generateToken(user.id);
-    setAuthCookie(res, token);
+    const user = await getMeService(userId);
 
-    return res.status(201).json({
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    return res.status(200).json({
       success: true,
-      message: "User Registration successfull",
+      message: "User retreived  successfull",
       data: user,
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "USERALREADYEXISTS") {
-      return res.status(409).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
-
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -39,41 +69,15 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+export const logout = async (req: AuthRequest, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
 
-    const user = await loginService(email, password);
-
-    if (!user) {
-      return res.status(500).json({
-        success: false,
-        message: "Failed to login user",
-      });
-    }
-
-    const token = generateToken(user.id);
-    setAuthCookie(res, token);
-
-    return res.status(200).json({
-      success: true,
-      message: "User logged in successfull",
-      data: user,
-    });
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      (error.message === "PASSWORDDOESNTMATCH" || "USERDOESNTEXISTS")
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid credentials",
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
+  return res.status(200).json({
+    success: true,
+    message: "User logged out successfull",
+  });
 };

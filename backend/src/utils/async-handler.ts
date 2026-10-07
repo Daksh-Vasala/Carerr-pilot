@@ -1,0 +1,13 @@
+import { NextFunction, Response } from "express";
+import { AuthRequest } from "../types/express.types.js";
+
+export const asynHandler = (
+  handler: (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ) => Promise<unknown>,
+) => {
+  return (req: AuthRequest, res: Response, next: NextFunction) =>
+    Promise.resolve(handler(req, res, next)).catch(next);
+};

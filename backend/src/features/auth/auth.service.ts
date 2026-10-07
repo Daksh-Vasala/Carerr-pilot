@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { users } from "../../db/schema/user.js";
 import bcrypt from "bcrypt";
+import { ApiError } from "../../utils/api-error.js";
 
 const userColumns = {
   id: users.id,
@@ -20,7 +21,7 @@ export const registerService = async (
     .where(eq(users.email, email));
 
   if (existingUser) {
-    throw new Error("USERALREADYEXISTS");
+    throw new ApiError(409, "User already exists");
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -40,13 +41,13 @@ export const loginService = async (email: string, password: string) => {
     .where(eq(users.email, email));
 
   if (!existingUser) {
-    throw new Error("USERDOESNTEXISTS");
+    throw new ApiError(400, "Invalid credentials");
   }
 
   const isMatch = await bcrypt.compare(password, existingUser.passwordHash);
 
   if (!isMatch) {
-    throw new Error("PASSWORDDOESNTMATCH");
+    throw new ApiError(400, "Invalid credentials");
   }
 
   return {
@@ -54,4 +55,13 @@ export const loginService = async (email: string, password: string) => {
     name: existingUser.name,
     email: existingUser.email,
   };
+};
+
+export const getMeService = async (userId: string) => {
+  const [user] = await db
+    .select(userColumns)
+    .from(users)
+    .where(eq(users.id, userId));
+
+  return user;
 };
