@@ -57,6 +57,20 @@
       "when": 1791438859971,
       "tag": "0007_foamy_guardsmen",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791463389021,
+      "tag": "0008_swift_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791465658981,
+      "tag": "0009_little_wendigo",
+      "breakpoints": true
     }
   ]
 }

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { AuthRequest } from "../../types/express.types.ts";
 import { ApiError } from "../../utils/api-error.ts";
 
-export const validate = (schema: z.ZodType) => {
+export const validateBody = (schema: z.ZodType) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 

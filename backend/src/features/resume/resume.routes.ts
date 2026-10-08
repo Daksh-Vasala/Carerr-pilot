@@ -8,7 +8,7 @@ import {
   getResumes,
 } from "./resume.controller.ts";
 import {
-  validate,
+  validateBody,
   validateParams,
   validateResumeFile,
 } from "../middlewares/validate.middleware.ts";
@@ -37,7 +37,7 @@ router.get(
 router.patch(
   "/:id",
   validateParams(resumeIdParamSchema),
-  validate(updateResumeSchema),
+  validateBody(updateResumeSchema),
   asynHandler(getResumeById),
 );
 
@@ -51,7 +51,7 @@ router.post(
   "/",
   uploadResume.single("file"),
   validateResumeFile,
-  validate(createResumeSchema),
+  validateBody(createResumeSchema),
   asynHandler(createResume),
 );
 

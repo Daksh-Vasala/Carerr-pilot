@@ -18,9 +18,21 @@ export const updateProfileSchema = z.object({
     .string()
     .trim()
     .regex(/^[0-9]{10}$/, "Invalid phone number").optional(),
-  linkedinUrl: z.string().trim().url("Invalid LinkedIn URL").optional(),
-  githubUrl: z.string().trim().url("Invalid Github URL").optional(),
-  portfolioUrl: z.string().trim().url("Invalid Portfolio URL").optional(),
+  linkedinUrl: z
+    .string()
+    .trim()
+    .pipe(z.url({ error: "Invalid LinkedIn URL" }))
+    .optional(),
+  githubUrl: z
+    .string()
+    .trim()
+    .pipe(z.url({ error: "Invalid Github URL" }))
+    .optional(),
+  portfolioUrl: z
+    .string()
+    .trim()
+    .pipe(z.url({ error: "Invalid Portfolio URL" }))
+    .optional(),
   location: z
     .string()
     .trim()
@@ -32,5 +44,4 @@ export const updateProfileSchema = z.object({
     .max(1000, "Bio must not exceed 1000 characters")
     .optional(),
 });
-
 
