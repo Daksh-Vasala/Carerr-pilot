@@ -6,12 +6,14 @@ import { ApiError } from "../../utils/api-error.js";
 
 const userColumns = {
   id: users.id,
-  name: users.name,
+  firstName: users.firstName,
+  lastName: users.lastName,
   email: users.email,
 };
 
 export const registerService = async (
-  name: string,
+  firstName: string,
+  lastName: string,
   email: string,
   password: string,
 ) => {
@@ -28,7 +30,7 @@ export const registerService = async (
 
   const [newUser] = await db
     .insert(users)
-    .values({ name, email, passwordHash })
+    .values({ firstName, lastName, email, passwordHash })
     .returning(userColumns);
 
   return newUser;
@@ -52,8 +54,9 @@ export const loginService = async (email: string, password: string) => {
 
   return {
     id: existingUser.id,
-    name: existingUser.name,
     email: existingUser.email,
+    firstName: existingUser.firstName,
+    lastName: existingUser.lastName,
   };
 };
 

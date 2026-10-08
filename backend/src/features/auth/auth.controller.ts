@@ -6,9 +6,9 @@ import { AuthRequest } from "../../types/express.types.js";
 import { ApiError } from "../../utils/api-error.js";
 
 export const register = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
-  const user = await registerService(name, email, password);
+  const user = await registerService(firstName, lastName, email, password);
 
   if (!user) {
     throw new ApiError(500, "Failed to register user");
