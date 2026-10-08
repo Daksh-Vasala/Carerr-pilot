@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../types/express.types.js";
-import { verifyToken } from "../../lib/jwt.js";
+import { AuthRequest } from "../../types/express.types.ts";
+import { verifyToken } from "../../lib/jwt.ts";
 
 export const authenticate = (
   req: AuthRequest,

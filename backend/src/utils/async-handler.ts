@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { AuthRequest } from "../types/express.types.js";
+import { AuthRequest } from "../types/express.types.ts";
 
 export const asynHandler = (
   handler: (

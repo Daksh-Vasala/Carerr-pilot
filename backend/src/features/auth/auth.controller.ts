@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { getMeService, loginService, registerService } from "./auth.service.js";
-import { generateToken } from "../../lib/jwt.js";
-import { setAuthCookie } from "../../lib/auth-cookie.js";
-import { AuthRequest } from "../../types/express.types.js";
-import { ApiError } from "../../utils/api-error.js";
+import { getMeService, loginService, registerService } from "./auth.service.ts";
+import { generateToken } from "../../lib/jwt.ts";
+import { setAuthCookie } from "../../lib/auth-cookie.ts";
+import { AuthRequest } from "../../types/express.types.ts";
+import { ApiError } from "../../utils/api-error.ts";
 
 export const register = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;

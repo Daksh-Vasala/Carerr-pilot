@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
-import { AuthRequest } from "../../types/express.types.js";
-import { ApiError } from "../../utils/api-error.js";
+import { AuthRequest } from "../../types/express.types.ts";
+import { ApiError } from "../../utils/api-error.ts";
 
 export const errorMiddleware = (
   error: unknown,

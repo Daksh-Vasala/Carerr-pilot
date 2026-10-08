@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../db/index.js";
-import { users } from "../../db/schema/user.js";
+import { db } from "../../db/index.ts";
+import { users } from "../../db/schema/user.ts";
 import bcrypt from "bcrypt";
-import { ApiError } from "../../utils/api-error.js";
+import { ApiError } from "../../utils/api-error.ts";
 
 const userColumns = {
   id: users.id,

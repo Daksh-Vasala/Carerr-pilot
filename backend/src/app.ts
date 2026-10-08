@@ -1,8 +1,8 @@
 import express from "express";
 import morgan from "morgan";
-import routes from "./routes/index.routes.js";
+import routes from "./routes/index.routes.ts";
 import cookieParser from "cookie-parser";
-import { errorMiddleware } from "./features/middlewares/error.middleware.js";
+import { errorMiddleware } from "./features/middlewares/error.middleware.ts";
 
 const app = express();
 

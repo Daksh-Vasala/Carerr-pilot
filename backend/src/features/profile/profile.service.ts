@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { db } from "../../db/index.js";
-import { users } from "../../db/schema/user.js";
+import { users } from "../../db/schema/user.ts";
 import { eq } from "drizzle-orm";
-import { ApiError } from "../../utils/api-error.js";
-import { profiles } from "../../db/schema/profile.js";
-import { UpdateProfileData } from "./profile.types.js";
+import { ApiError } from "../../utils/api-error.ts";
+import { profiles } from "../../db/schema/profile.ts";
+import { UpdateProfileData } from "./profile.types.ts";
 
 const userColumns = {
   id: users.id,

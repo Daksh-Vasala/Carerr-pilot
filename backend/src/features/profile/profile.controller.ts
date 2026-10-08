@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { AuthRequest } from "../../types/express.types.js";
-import { getProfileService, updateProfileService } from "./profile.service.js";
-import { ApiError } from "../../utils/api-error.js";
+import { AuthRequest } from "../../types/express.types.ts";
+import { getProfileService, updateProfileService } from "./profile.service.ts";
+import { ApiError } from "../../utils/api-error.ts";
 
 export const getProfile = async (req: AuthRequest, res: Response) => {
   if (!req.userId) {

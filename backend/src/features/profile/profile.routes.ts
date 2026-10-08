@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { authenticate } from "../middlewares/auth.middleware.js";
-import { validate } from "../middlewares/validate.middleware.js";
-import { updateProfileSchema } from "./profile.validation.js";
-import { asynHandler } from "../../utils/async-handler.js";
-import { getProfile, updateProfile } from "./profile.controller.js";
+import { authenticate } from "../middlewares/auth.middleware.ts";
+import { validate } from "../middlewares/validate.middleware.ts";
+import { updateProfileSchema } from "./profile.validation.ts";
+import { asynHandler } from "../../utils/async-handler.ts";
+import { getProfile, updateProfile } from "./profile.controller.ts";
 
 const router = Router();
 
