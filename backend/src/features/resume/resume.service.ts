@@ -3,6 +3,9 @@ import { db } from "../../db/index.ts";
 import { resumes } from "../../db/schema/resume.ts";
 import { ApiError } from "../../utils/api-error.ts";
 import { UpdateResume } from "./resume.types.ts";
+import { CreateResumeData } from "./resume.validation.ts";
+import { uploadResumeToCloudinary } from "../../lib/cloudinary.ts";
+import cloudinary from "../../config/cloudinary.ts";
 
 const resumeColumns = {
   id: resumes.id,
@@ -10,6 +13,7 @@ const resumeColumns = {
   userId: resumes.userId,
   fileName: resumes.fileName,
   fileUrl: resumes.fileUrl,
+  publicId: resumes.publicId,
   fileSize: resumes.fileSize,
   fileType: resumes.fileType,
   createdAt: resumes.createdAt,
@@ -66,13 +70,55 @@ export const updateResumeService = async (
 
 export const deleteResumeService = async (resumeId: string, userId: string) => {
   const [resume] = await db
-    .delete(resumes)
-    .where(and(eq(resumes.id, resumeId), eq(resumes.userId, userId)))
-    .returning(resumeColumns);
+    .select()
+    .from(resumes)
+    .where(and(eq(resumes.id, resumeId), eq(resumes.userId, userId)));
 
   if (!resume) {
     throw new ApiError(404, "Resume not found");
   }
+
+  try {
+    await cloudinary.uploader.destroy(resume.publicId, {
+      resource_type: "image",
+      type: "upload",
+    });
+  } catch (error) {
+    console.error("Cloudinary deletion failed:", error);
+
+    throw new ApiError(502, "Failed to delete resume from storage");
+  }
+
+  const [deletedResume] = await db
+    .delete(resumes)
+    .where(eq(resumes.id, resumeId))
+    .returning(resumeColumns);
+
+  return deletedResume;
+};
+
+export const createResumeService = async (
+  userId: string,
+  data: CreateResumeData,
+  file: Express.Multer.File,
+) => {
+  const uploadResult = await uploadResumeToCloudinary(
+    file.buffer,
+    file.originalname,
+  );
+
+  const [resume] = await db
+    .insert(resumes)
+    .values({
+      userId,
+      title: data.title,
+      fileName: file.originalname,
+      fileUrl: uploadResult.secureUrl,
+      fileSize: file.size,
+      fileType: file.mimetype,
+      publicId: uploadResult.publicId,
+    })
+    .returning(resumeColumns);
 
   return resume;
 };

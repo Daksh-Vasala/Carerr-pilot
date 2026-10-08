@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../../types/express.types.ts";
 import {
+  createResumeService,
   deleteResumeService,
   getResumeByIdService,
   getResumesService,
@@ -64,5 +65,22 @@ export const deleteResume = async (req: AuthRequest, res: Response) => {
     success: true,
     message: "Resume deleted successfully",
     data: deletedResume,
+  });
+};
+
+export const createResume = async (req: AuthRequest, res: Response) => {
+  const userId = req.userId!;
+  const file = req.file;
+
+  if (!file) {
+    throw new ApiError(400, "Resume file is required");
+  }
+
+  const resume = await createResumeService(userId, req.body, file);
+
+  return res.status(200).json({
+    success: true,
+    message: "Resume uploaded successfully",
+    data: resume,
   });
 };

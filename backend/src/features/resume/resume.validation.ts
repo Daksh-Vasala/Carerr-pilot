@@ -30,5 +30,14 @@ export const resumeIdParamSchema = z.object({
   id: z.uuid("Invalid resume id"),
 });
 
+export const createResumeSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(2, "Title must be at least 2 characters")
+    .max(100, "Title must not exceed 100 characters"),
+})
+
 export type UpdateResume = z.infer<typeof updateResumeSchema>;
 export type ResumeIdParam = z.infer<typeof resumeIdParamSchema>;
+export type CreateResumeData = z.infer<typeof createResumeSchema>;
