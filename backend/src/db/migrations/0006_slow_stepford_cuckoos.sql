@@ -1,0 +1,1 @@
+ALTER TABLE "resumes" ADD COLUMN "test_field" varchar(50);
