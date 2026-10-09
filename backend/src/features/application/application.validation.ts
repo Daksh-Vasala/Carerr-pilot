@@ -19,4 +19,22 @@ export const createApplicationSchema = z.object({
   recruiterEmail: z.email().optional().nullable(),
 });
 
+export const updateApplicationSchema = z.object({
+  status: z
+    .enum([
+      "APPLIED",
+      "INTERVIEW",
+      "OFFER",
+      "ACCEPTED",
+      "REJECTED",
+      "WITHDRAWN",
+    ])
+    .default("APPLIED"),
+  appliedAt: z.iso.datetime().optional().nullable(),
+  notes: z.string().trim().optional().nullable(),
+  recruiterName: z.string().trim().max(150).optional().nullable(),
+  recruiterEmail: z.email().optional().nullable(),
+});
+
+export type UpdateApplicationData = z.infer<typeof updateApplicationSchema>;
 export type CreateApplicationData = z.infer<typeof createApplicationSchema>;
