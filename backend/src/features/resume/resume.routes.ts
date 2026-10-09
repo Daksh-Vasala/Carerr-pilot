@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/auth.middleware.ts";
-import { asynHandler } from "../../utils/async-handler.ts";
+import { asyncHandler } from "../../utils/async-handler.ts";
 import {
   createResume,
   deleteResume,
@@ -14,37 +14,34 @@ import {
 } from "../middlewares/validate.middleware.ts";
 import {
   createResumeSchema,
-  resumeIdParamSchema,
   updateResumeSchema,
 } from "./resume.validation.ts";
-import {
-  uploadResume,
-  uploadResumeFile,
-} from "../middlewares/upload.middleware.ts";
+import { uploadResume } from "../middlewares/upload.middleware.ts";
+import { IdParamSchema } from "../validation/idParamSchema.ts";
 
 const router = Router();
 
 router.use(authenticate);
 
-router.get("/", asynHandler(getResumes));
+router.get("/", asyncHandler(getResumes));
 
 router.get(
   "/:id",
-  validateParams(resumeIdParamSchema),
-  asynHandler(getResumeById),
+  validateParams(IdParamSchema),
+  asyncHandler(getResumeById),
 );
 
 router.patch(
   "/:id",
-  validateParams(resumeIdParamSchema),
+  validateParams(IdParamSchema),
   validateBody(updateResumeSchema),
-  asynHandler(getResumeById),
+  asyncHandler(getResumeById),
 );
 
 router.delete(
   "/:id",
-  validateParams(resumeIdParamSchema),
-  asynHandler(deleteResume),
+  validateParams(IdParamSchema),
+  asyncHandler(deleteResume),
 );
 
 router.post(
@@ -52,7 +49,7 @@ router.post(
   uploadResume.single("file"),
   validateResumeFile,
   validateBody(createResumeSchema),
-  asynHandler(createResume),
+  asyncHandler(createResume),
 );
 
 export default router;

@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../types/express.types.ts";
 
-export const asynHandler = (
+export const asyncHandler = (
   handler: (
     req: AuthRequest,
     res: Response,

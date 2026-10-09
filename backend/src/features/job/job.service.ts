@@ -1,9 +1,8 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../../db/index.ts";
 import { jobs } from "../../db/schema/job.ts";
 import { CreateJobData, UpdateJobData } from "./job.validation.ts";
 import { ApiError } from "../../utils/api-error.ts";
-import { string } from "zod";
 
 export const createJobService = async (userId: string, data: CreateJobData) => {
   const [job] = await db

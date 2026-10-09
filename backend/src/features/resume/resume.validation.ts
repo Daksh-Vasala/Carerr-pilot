@@ -26,9 +26,6 @@ export const updateResumeSchema = z.object({
   // extractedText: z.string(),
 });
 
-export const resumeIdParamSchema = z.object({
-  id: z.uuid("Invalid resume id"),
-});
 
 export const createResumeSchema = z.object({
   title: z
@@ -39,5 +36,4 @@ export const createResumeSchema = z.object({
 })
 
 export type UpdateResume = z.infer<typeof updateResumeSchema>;
-export type ResumeIdParam = z.infer<typeof resumeIdParamSchema>;
 export type CreateResumeData = z.infer<typeof createResumeSchema>;

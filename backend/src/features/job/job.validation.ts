@@ -92,10 +92,5 @@ export const updateJobSchema = z.object({
     .optional(),
 });
 
-export const jobIdParamSchema = z.object({
-  id: z.uuid("Invalid job id"),
-});
-
 export type UpdateJobData = z.infer<typeof updateJobSchema>;
 export type CreateJobData = z.infer<typeof createJobSchema>;
-export type JobIdParam = z.infer<typeof jobIdParamSchema>;

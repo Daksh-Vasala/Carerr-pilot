@@ -71,6 +71,13 @@
       "when": 1791465658981,
       "tag": "0009_little_wendigo",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791528588761,
+      "tag": "0010_premium_the_fury",
+      "breakpoints": true
     }
   ]
 }
