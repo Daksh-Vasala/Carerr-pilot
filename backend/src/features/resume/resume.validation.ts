@@ -26,14 +26,18 @@ export const updateResumeSchema = z.object({
   // extractedText: z.string(),
 });
 
-
 export const createResumeSchema = z.object({
   title: z
     .string()
     .trim()
     .min(2, "Title must be at least 2 characters")
     .max(100, "Title must not exceed 100 characters"),
-})
+});
 
+export const resumeIdParamSchema = z.object({
+  id: z.uuid("Invalid resume id"),
+});
+
+export type ResumeIdParam = z.infer<typeof resumeIdParamSchema>;
 export type UpdateResume = z.infer<typeof updateResumeSchema>;
 export type CreateResumeData = z.infer<typeof createResumeSchema>;

@@ -14,10 +14,10 @@ import {
 } from "../middlewares/validate.middleware.ts";
 import {
   createResumeSchema,
+  resumeIdParamSchema,
   updateResumeSchema,
 } from "./resume.validation.ts";
 import { uploadResume } from "../middlewares/upload.middleware.ts";
-import { IdParamSchema } from "../validation/idParamSchema.ts";
 
 const router = Router();
 
@@ -27,20 +27,20 @@ router.get("/", asyncHandler(getResumes));
 
 router.get(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(resumeIdParamSchema),
   asyncHandler(getResumeById),
 );
 
 router.patch(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(resumeIdParamSchema),
   validateBody(updateResumeSchema),
   asyncHandler(getResumeById),
 );
 
 router.delete(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(resumeIdParamSchema),
   asyncHandler(deleteResume),
 );
 

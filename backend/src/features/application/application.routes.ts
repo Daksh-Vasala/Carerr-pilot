@@ -13,10 +13,10 @@ import {
   validateParams,
 } from "../middlewares/validate.middleware.ts";
 import {
+    applicationIdParamSchema,
   createApplicationSchema,
   updateApplicationSchema,
 } from "./application.validation.ts";
-import { IdParamSchema } from "../validation/idParamSchema.ts";
 
 const router = Router();
 
@@ -32,20 +32,20 @@ router.post(
 
 router.get(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(applicationIdParamSchema),
   asyncHandler(getApplicationById),
 );
 
 router.patch(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(applicationIdParamSchema),
   validateBody(updateApplicationSchema),
   asyncHandler(updateApplication),
 );
 
 router.delete(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(applicationIdParamSchema),
   asyncHandler(deleteApplication),
 );
 

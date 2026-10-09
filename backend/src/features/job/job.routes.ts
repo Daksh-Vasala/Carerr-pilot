@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   createJobSchema,
+  jobIdParamSchema,
   updateJobSchema,
 } from "./job.validation.ts";
 import {
@@ -17,7 +18,6 @@ import {
   validateParams,
 } from "../middlewares/validate.middleware.ts";
 import { asyncHandler } from "../../utils/async-handler.ts";
-import { IdParamSchema } from "../validation/idParamSchema.ts";
 
 const router = Router();
 
@@ -27,18 +27,18 @@ router.post("/", validateBody(createJobSchema), asyncHandler(createJob));
 
 router.get("/", asyncHandler(getAllJobs));
 
-router.get("/:id", validateParams(IdParamSchema), asyncHandler(getJobById));
+router.get("/:id", validateParams(jobIdParamSchema), asyncHandler(getJobById));
 
 router.patch(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(jobIdParamSchema),
   validateBody(updateJobSchema),
   asyncHandler(updateJob),
 );
 
 router.delete(
   "/:id",
-  validateParams(IdParamSchema),
+  validateParams(jobIdParamSchema),
   asyncHandler(deleteJob),
 );
 

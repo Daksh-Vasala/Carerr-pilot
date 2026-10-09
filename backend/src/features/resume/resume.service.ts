@@ -6,6 +6,7 @@ import { UpdateResume } from "./resume.types.ts";
 import { CreateResumeData } from "./resume.validation.ts";
 import { uploadResumeToCloudinary } from "../../lib/cloudinary.ts";
 import cloudinary from "../../config/cloudinary.ts";
+import { extractPdfText } from "../../utils/extractPdfText.ts";
 
 const resumeColumns = {
   id: resumes.id,
@@ -102,6 +103,8 @@ export const createResumeService = async (
   data: CreateResumeData,
   file: Express.Multer.File,
 ) => {
+  const extractedText = await extractPdfText(file.buffer);
+
   const uploadResult = await uploadResumeToCloudinary(
     file.buffer,
     file.originalname,
@@ -117,6 +120,7 @@ export const createResumeService = async (
       fileSize: file.size,
       fileType: file.mimetype,
       publicId: uploadResult.publicId,
+      extractedText,
     })
     .returning(resumeColumns);
 

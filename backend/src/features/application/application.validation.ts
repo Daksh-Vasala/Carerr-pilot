@@ -36,5 +36,10 @@ export const updateApplicationSchema = z.object({
   recruiterEmail: z.email().optional().nullable(),
 });
 
+export const applicationIdParamSchema = z.object({
+  id: z.uuid("Invalid application id"),
+});
+
+export type ApplicationIdParam = z.infer<typeof applicationIdParamSchema>;
 export type UpdateApplicationData = z.infer<typeof updateApplicationSchema>;
 export type CreateApplicationData = z.infer<typeof createApplicationSchema>;
