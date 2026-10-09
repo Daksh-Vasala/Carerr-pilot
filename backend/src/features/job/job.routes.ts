@@ -1,7 +1,17 @@
 import { Router } from "express";
 
-import { createJobSchema, jobIdParamSchema } from "./job.validation.ts";
-import { createJob, getAllJobs, getJobById } from "./job.controller.ts";
+import {
+  createJobSchema,
+  jobIdParamSchema,
+  updateJobSchema,
+} from "./job.validation.ts";
+import {
+  createJob,
+  deleteJob,
+  getAllJobs,
+  getJobById,
+  updateJob,
+} from "./job.controller.ts";
 import { authenticate } from "../middlewares/auth.middleware.ts";
 import {
   validateBody,
@@ -18,5 +28,14 @@ router.post("/", validateBody(createJobSchema), asynHandler(createJob));
 router.get("/", asynHandler(getAllJobs));
 
 router.get("/:id", validateParams(jobIdParamSchema), asynHandler(getJobById));
+
+router.patch(
+  "/:id",
+  validateParams(jobIdParamSchema),
+  validateBody(updateJobSchema),
+  asynHandler(updateJob),
+);
+
+router.delete("/:id", validateParams(jobIdParamSchema), asynHandler(deleteJob));
 
 export default router;

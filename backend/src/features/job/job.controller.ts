@@ -2,8 +2,10 @@ import { Response } from "express";
 import { AuthRequest } from "../../types/express.types.ts";
 import {
   createJobService,
+  deleteJobService,
   getAllJobsService,
   getJobByIdService,
+  updateJobService,
 } from "./job.service.ts";
 import { ApiError } from "../../utils/api-error.ts";
 
@@ -47,7 +49,33 @@ export const getJobById = async (req: AuthRequest, res: Response) => {
 
   return res.status(200).json({
     success: true,
-    message: "Jobs fetched successfully",
+    message: "Job fetched successfully",
+    data: job,
+  });
+};
+
+export const updateJob = async (req: AuthRequest, res: Response) => {
+  const userId = req.userId!;
+  const jobId = req.params.id;
+
+  const job = await updateJobService(userId, String(jobId), req.body);
+
+  return res.status(200).json({
+    success: true,
+    message: "Job updated successfully",
+    data: job,
+  });
+};
+
+export const deleteJob = async (req: AuthRequest, res: Response) => {
+  const userId = req.userId!;
+  const jobId = req.params.id;
+
+  const job = await deleteJobService(userId, String(jobId));
+
+  return res.status(200).json({
+    success: true,
+    message: "Job deleted successfully",
     data: job,
   });
 };
